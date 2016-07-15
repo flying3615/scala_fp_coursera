@@ -1,4 +1,5 @@
-package week2.funsets
+package funsets
+
 
 /**
   * 2. Purely Functional Sets.
@@ -42,7 +43,7 @@ object FunSets {
   /**
     * Returns the subset of `s` for which `p` holds.
     */
-  def filter(s: Set, p: Int => Boolean): Set = (elem: Int) => s(elem) && p.apply(elem)
+  def filter(s: Set, p: Int => Boolean): Set = (elem: Int) => s(elem) && p(elem)
 
 
   /**
@@ -55,23 +56,23 @@ object FunSets {
     */
   def forall(s: Set, p: Int => Boolean): Boolean = {
     def iter(a: Int): Boolean = {
-      if (a > bound) false
-      else if (s(a) && p.apply(a)) true
+      if (a > bound) true
+      else if (contains(s,a) && !p(a)) false
       else iter(a + 1)
     }
-    iter(bound)
+    iter(-bound)
   }
 
   /**
     * Returns whether there exists a bounded integer within `s`
     * that satisfies `p`.
     */
-  def exists(s: Set, p: Int => Boolean): Boolean = this.forall(s,(x:Int)=>p(x))
+  def exists(s: Set, p: Int => Boolean): Boolean = !forall(s, (x => !p(x)))
 
   /**
     * Returns a set transformed by applying `f` to each element of `s`.
     */
-  def map(s: Set, f: Int => Int): Set = ???
+  def map(s: Set, f: Int => Int): Set = (e:Int) => exists(s, (x => f(x) == e))
 
   /**
     * Displays the contents of a set
